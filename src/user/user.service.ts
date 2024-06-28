@@ -1,14 +1,21 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entities/User';
-import { hashSync } from 'bcrypt';
+import { compareSync, hashSync } from 'bcrypt';
+import _ from 'lodash';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private jwtService: JwtService
   ) {}
 
   async signUp(email: string, nickname: string, userPassword: string) {
@@ -18,14 +25,30 @@ export class UserService {
     }
     const hashPassword = hashSync(userPassword, 10);
 
-    const newUser = await this.userRepository.save({
+    await this.userRepository.save({
       email,
       password: hashPassword,
       nickname,
     });
+    return { message: '회원가입 성공하였습니다.' };
+  }
 
-    const { password, ...user } = newUser;
-    return user;
+  async signIn(email: string, password: string) {
+    const userData = await this.userRepository.findOne({
+      select: ['id', 'email', 'password'],
+      where: { email },
+    });
+    if (_.isNil(userData)) {
+      throw new UnauthorizedException('가입되지 않은 이메일 입니다.');
+    }
+
+    if(!compareSync(password, userData.password)){
+      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+    }
+    const payload = {id: userData.id}
+    return{
+      accessToken: this.jwtService.sign(payload)
+    }
   }
 
   async findByEmail(email: string) {

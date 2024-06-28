@@ -12,6 +12,8 @@ import { Seat } from './entities/Seat';
 import { Order } from './entities/Order';
 import { Category } from './entities/Category';
 import { Performance } from './entities/Performance';
+import { AuthModule } from './auth/auth.module';
+import { PerformanceModule } from './performance/performance.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -48,6 +50,8 @@ const typeOrmModuleOptions = {
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
     UserModule,
+    AuthModule,
+    PerformanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
