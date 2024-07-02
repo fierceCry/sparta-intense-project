@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Performance } from './Performance';
 import { Order } from './Order';
-import { Role } from './Role-enum';
+import { Role } from '../types/Role-enum';
 
 @Index('email', ['email'], { unique: true })
 @Entity({ name: 'user' })
@@ -32,7 +32,7 @@ export class User {
   @Column({
     type: 'enum',
     enum: Role,
-    default: Role.USER, // 기본값 설정
+    default: Role.USER,
   })
   role: string;
 

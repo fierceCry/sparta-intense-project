@@ -11,7 +11,7 @@ import {
 import { User } from './User';
 import { Category } from './Category';
 import { PerformanceTime } from './PerformanceTime';
-import { Seat } from './Seat';
+import { Seats } from './Seats';
 import { Order } from './Order';
 
 @Entity({ name: 'performance' })
@@ -34,9 +34,6 @@ export class Performance {
   @Column({ name: 'performance_venue', nullable: false })
   performanceVenue: string;
 
-  @Column({ name: 'performance_price', nullable: false })
-  performancePrice: number;
-
   @Column({ name: 'performance_image', nullable: false })
   performanceImage: string;
 
@@ -57,8 +54,8 @@ export class Performance {
   @OneToMany(() => PerformanceTime, (performanceTime) => performanceTime.performance)
   performanceTimes: PerformanceTime[];
 
-  @OneToMany(() => Seat, (seat) => seat.performance)
-  seats: Seat[];
+  @OneToMany(() => Seats, (seats) => seats.performance)
+  seats: Seats[];
 
   @OneToMany(() => Order, (order) => order.performance)
   orders: Order[];

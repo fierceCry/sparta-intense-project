@@ -8,7 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './entities/User';
 import { PerformanceTime } from './entities/PerformanceTime';
-import { Seat } from './entities/Seat';
+import { Seats } from './entities/Seats';
 import { Order } from './entities/Order';
 import { Category } from './entities/Category';
 import { Performance } from './entities/Performance';
@@ -26,7 +26,7 @@ const typeOrmModuleOptions = {
     host: configService.get('DB_HOST'),
     port: configService.get('DB_PORT'),
     database: configService.get('DB_NAME'),
-    entities: [Performance, Category, User, PerformanceTime, Seat, Order],
+    entities: [Performance, Category, User, PerformanceTime, Seats, Order],
     synchronize: configService.get('DB_SYNC'),
     logging: true,
   }),

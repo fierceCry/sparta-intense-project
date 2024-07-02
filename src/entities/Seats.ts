@@ -10,9 +10,10 @@ import {
 } from 'typeorm';
 import { Performance } from './Performance';
 import { Order } from './Order';
+import { PerformanceTime } from './PerformanceTime';
 
 @Entity('seats')
-export class Seat {
+export class Seats {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,10 +21,10 @@ export class Seat {
   @JoinColumn({ name: 'performance_id' })
   performance: Performance;
 
-  @Column({ nullable: false })
-  seatNumber: string;
+  @Column('json',{ nullable: false, name: 'seat_number'})
+  seatNumber: number | number[];
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'is_available'})
   isAvailable: boolean;
 
   @Column({ nullable: false })
@@ -32,15 +33,16 @@ export class Seat {
   @Column({ nullable: false })
   price: number;
 
-  @Column({ nullable: false })
-  isReserved: boolean;
-
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @OneToMany(() => Order, (order) => order.seat)
+  @ManyToOne(() => PerformanceTime, (performanceTime) => performanceTime.seats)
+  @JoinColumn({ name: 'performance_time_id' })
+  performanceTime: PerformanceTime;
+  
+  @OneToMany(() => Order, (order) => order.seats)
   orders: Order[];
 }

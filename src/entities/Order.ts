@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { User } from './User';
 import { Performance } from './Performance';
-import { Seat } from './Seat';
+import { Seats } from './Seats';
 
 @Entity('orders')
 export class Order {
@@ -49,7 +49,7 @@ export class Order {
   @JoinColumn({ name: 'performance_id' })
   performance: Performance;
 
-  @ManyToOne(() => Seat, (seat) => seat.orders)
-  @JoinColumn({ name: 'seat_id' })
-  seat: Seat;
+  @ManyToOne(() => Seats, (seats) => seats.orders)
+  @JoinColumn({ name: 'seats_id' })
+  seats: Seats;
 }

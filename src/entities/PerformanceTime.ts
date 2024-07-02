@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Performance } from './Performance';
+import { Seats } from './Seats';
 
 @Entity('performanceTimes')
 export class PerformanceTime {
@@ -29,4 +31,7 @@ export class PerformanceTime {
 
   @UpdateDateColumn({ name: 'updatedAt' })
   updatedAt: Date;
+
+  @OneToMany(()=> Seats, (seats) => seats.performanceTime)
+  seats: Seats[];
 }
