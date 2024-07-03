@@ -43,6 +43,9 @@ export class Seats {
   @JoinColumn({ name: 'performance_time_id' })
   performanceTime: PerformanceTime;
   
+  @Column({ nullable: false, name: 'performance_time_id' })
+  performanceTimeId: number;
+
   @OneToMany(() => Order, (order) => order.seats)
   orders: Order[];
 }

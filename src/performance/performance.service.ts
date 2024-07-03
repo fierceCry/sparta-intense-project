@@ -48,10 +48,10 @@ export class PerformanceService {
     });
 
     const savedPerformanceTimes = await Promise.all(
-      performanceTimes.map(async (time) => {
+      performanceTimes.map(async (times) => {
         const newPerformanceTime = this.performanceTimeRepository.create({
           performance: newPerformance,
-          performanceDateTime: new Date(time),
+          performanceDateTimes: [times], // Save performance times as array of strings
           seatsRemaining: performanceSeats.reduce(
             (acc, seat) => acc + seat.seat_count,
             0,
@@ -61,13 +61,13 @@ export class PerformanceService {
       }),
     );
 
-    // 좌석 정보 생성 및 저장
     for (const time of savedPerformanceTimes) {
       for (const seat of performanceSeats) {
         if (seat.grade.toLowerCase() === 'standing') {
           const newSeat = this.seatsRepository.create({
             performance: newPerformance,
             performanceTime: time,
+            performanceTimeId: time.id,
             seatNumber: seat.seat_count,
             isAvailable: true,
             grade: seat.grade,
@@ -79,19 +79,19 @@ export class PerformanceService {
             { length: seat.seat_count },
             (_, i) => i + 1,
           );
-          const newSeat = this.seatsRepository.create({
+          const newSeats = this.seatsRepository.create({
             performance: newPerformance,
             performanceTime: time,
+            performanceTimeId: time.id,
             seatNumber: seatNumbers,
             isAvailable: true,
             grade: seat.grade,
             price: seat.price,
           });
-          await this.seatsRepository.save(newSeat);
+          await this.seatsRepository.save(newSeats);
         }
       }
     }
-
 
     return newPerformance;
   }

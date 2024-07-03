@@ -20,16 +20,16 @@ export class PerformanceTime {
   @JoinColumn({ name: 'performance_id' })
   performance: Performance;
 
-  @Column({ nullable: false })
-  performanceDateTime: Date;
+  @Column({ type: 'varchar', nullable: false, name: 'performance_date_times' })
+  performanceDateTimes: string[];
 
   @Column({ nullable: false })
   seatsRemaining: number;
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
   @OneToMany(()=> Seats, (seats) => seats.performanceTime)
