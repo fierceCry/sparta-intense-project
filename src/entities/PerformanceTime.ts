@@ -16,6 +16,9 @@ export class PerformanceTime {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({name: 'performance_id'})
+  performanceId: number
+  
   @ManyToOne(() => Performance, (performance) => performance.performanceTimes)
   @JoinColumn({ name: 'performance_id' })
   performance: Performance;

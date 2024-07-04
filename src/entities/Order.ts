@@ -23,8 +23,8 @@ export class Order {
   @Column({ name: 'performance_id' })
   performanceId: number;
 
-  @Column({ name: 'seatId' })
-  seatId: number;
+  @Column({ name: 'seat_number', type: 'varchar', nullable: true })
+  seatNumber: string;
 
   @Column({ nullable: false })
   quantity: number;
@@ -35,10 +35,10 @@ export class Order {
   @Column({ nullable: false })
   paymentStatus: string;
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.orders)

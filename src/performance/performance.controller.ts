@@ -174,4 +174,21 @@ export class PerformanceController {
   getPerformanceId(@Param('performanceId') performanceId: number) {
     return this.performanceService.getPerformanceById(performanceId);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('reserve')
+  async reserveSeat(@Body() reserveSeatDto: {
+    performanceId: number;
+    grade: string;
+    seatCount: number;
+    performanceTime: string;
+  }, @UserInfo() user: User) {
+    return await this.performanceService.reserveSeat(
+      user.id,
+      reserveSeatDto.performanceId,
+      reserveSeatDto.grade,
+      reserveSeatDto.seatCount,
+      reserveSeatDto.performanceTime,
+    );
+  }
 }

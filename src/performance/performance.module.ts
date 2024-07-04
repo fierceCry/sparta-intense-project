@@ -5,16 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Performance } from 'src/entities/Performance';
 import { PerformanceTime } from 'src/entities/PerformanceTime';
 import { Seats } from 'src/entities/Seats';
+import { UserModule } from 'src/user/user.module';
+import { User } from 'src/entities/User';
+import { Order } from 'src/entities/Order';
 
 @Module({
   imports: [
-    // JwtModule.registerAsync({
-    //   useFactory: (config: ConfigService) => ({
-    //     secret: config.get<string>('JWT_SECRET_KEY'),
-    //   }),
-    //   inject: [ConfigService],
-    // }),
-    TypeOrmModule.forFeature([Performance, PerformanceTime, Seats]),
+    TypeOrmModule.forFeature([Performance, PerformanceTime, Seats, User, Order]),
+    UserModule
   ],
   providers: [PerformanceService],
   controllers: [PerformanceController],

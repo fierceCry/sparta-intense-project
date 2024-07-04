@@ -17,12 +17,15 @@ export class Seats {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({name: 'performance_id'})
+  performanceId: number
+
   @ManyToOne(() => Performance, (performance) => performance.seats)
   @JoinColumn({ name: 'performance_id' })
   performance: Performance;
 
   @Column('json',{ nullable: false, name: 'seat_number'})
-  seatNumber: number | number[];
+  seatNumber: number[];
 
   @Column({ nullable: false, name: 'is_available'})
   isAvailable: boolean;
