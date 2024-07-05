@@ -17,7 +17,7 @@ export class Seats {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({name: 'performance_id'})
+  @Column({name: 'performance_id', nullable: false})
   performanceId: number
 
   @ManyToOne(() => Performance, (performance) => performance.seats)

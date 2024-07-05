@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -17,13 +16,13 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'user_id' })
+  @Column({ name: 'user_id', nullable: false})
   userId: number;
 
-  @Column({ name: 'performance_id' })
+  @Column({ name: 'performance_id', nullable: false})
   performanceId: number;
 
-  @Column({ name: 'seat_number', type: 'varchar', nullable: true })
+  @Column({ name: 'seat_number', type: 'varchar', nullable: false })
   seatNumber: string;
 
   @Column({ nullable: false })

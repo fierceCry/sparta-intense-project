@@ -19,10 +19,10 @@ export class Performance {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'user_id' })
+  @Column({ name: 'user_id', nullable: false})
   userId: number;
 
-  @Column({ name: 'category_id' })
+  @Column({ name: 'category_id', nullable: false })
   categoryId: number;
 
   @Column({ name: 'performance_name', nullable: false })

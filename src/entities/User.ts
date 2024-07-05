@@ -17,13 +17,14 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column({ type: 'varchar', name: 'email' })
+  @Column({ type: 'varchar', name: 'email', nullable: false})
   email: string;
 
-  @Column({ type: 'varchar', name: 'password' })
+  @Column({ type: 'varchar', name: 'password', nullable: false
+  })
   password: string;
 
-  @Column({ type: 'varchar', name: 'nickname' })
+  @Column({ type: 'varchar', name: 'nickname', nullable: false})
   nickname: string;
 
   @Column({ type: 'int', name: 'point', default: 1000000 })
@@ -36,10 +37,10 @@ export class User {
   })
   role: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
   @OneToMany(() => Performance, (performance) => performance.user)

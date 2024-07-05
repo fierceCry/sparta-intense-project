@@ -11,7 +11,6 @@ import {
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { SignUpDto } from './dto/sign-up.dto';
 import { UserService } from './user.service';
-import { SignInDto } from './dto/sign-in.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UserInfo } from 'src/common/decorators/user.decorators';
 import { User } from 'src/entities/User';
@@ -23,13 +22,11 @@ export class UserController {
 
   @ApiOperation({ summary: '회원가입' })
   @ApiCreatedResponse({
-    description: '회원가입 성공하였습니다.',
     schema: {
       example: { message: '회원가입 성공하였습니다.' },
     },
   })
   @ApiConflictResponse({
-    description: '가입 된 이메일이 있습니다.',
     schema: {
       example: {
         status: 409,
@@ -38,40 +35,29 @@ export class UserController {
     },
   })
   @ApiBadRequestResponse({
-    description: '잘못된 요청입니다.',
+    description: '잘못된 요청 데이터',
     schema: {
-      examples: {
-        invalidEmail: {
-          summary: '유효하지 않은 이메일 주소',
-          value: {
-            status: 400,
-            message: '유효한 이메일 주소를 입력해주세요.',
-          },
+      example: [
+        {
+          status: 400,
+          message: '유효한 이메일 주소를 입력해주세요.',
         },
-        emptyEmail: {
-          summary: '이메일이 비어있음',
-          value: {
-            status: 400,
-            message: '이메일을 입력해주세요.',
-          },
+        {
+          status: 400,
+          message: '이메일을 입력해주세요.',
         },
-        emptyPassword: {
-          summary: '비밀번호가 비어있음',
-          value: {
-            status: 400,
-            message: '비밀번호를 입력해주세요.',
-          },
+        {
+          status: 400,
+          message: '비밀번호를 입력해주세요.',
         },
-        emptyNickname: {
-          summary: '닉네임이 비어있음',
-          value: {
-            status: 400,
-            message: '닉네임을 입력해주세요.',
-          },
+        {
+          status: 400,
+          message: '닉네임을 입력해주세요.',
         },
-      },
+      ],
     },
   })
+  
   @Post('sign-up')
   signUp(@Body() signUpDto: SignUpDto) {
     const { nickname, email, password } = signUpDto;
@@ -82,30 +68,27 @@ export class UserController {
   @ApiOkResponse({
     schema: {
       example: {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV9.eyJpZCI6NiwiaWF0IjoxNzE5NTkxMzU5fQ.8eXmMa8s5BrD0TSbCdZJETGKHsakpQ8AArIoeR9q3R8',
+        accessToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV9.eyJpZCI6NiwiaWF0IjoxNzE5NTkxMzU5fQ.8eXmMa8s5BrD0TSbCdZJETGKHsakpQ8AArIoeR9q3R8',
       },
     },
   })
   @ApiUnauthorizedResponse({
+    description: '인증되지 않은 접근',
     schema: {
-      examples: {
-        emailNotRegistered: {
-          summary: '가입되지 않은 이메일',
-          value: {
-            status: 401,
-            message: '가입되지 않은 이메일 입니다.',
-          },
+      example: [
+        {
+          status: 401,
+          message: '가입되지 않은 이메일 입니다.',
         },
-        passwordMismatch: {
-          summary: '비밀번호 불일치',
-          value: {
-            status: 401,
-            message: '비밀번호가 일치하지 않습니다.',
-          },
+        {
+          status: 401,
+          message: '비밀번호가 일치하지 않습니다.',
         },
-      },
+      ],
     },
   })
+  
   @UseGuards(AuthGuard('local'))
   @Post('sign-in')
   signIn(@UserInfo() user: User) {
@@ -115,6 +98,7 @@ export class UserController {
   @ApiOperation({ summary: '프로필 조회' })
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
+    description: '토큰이 없는 경우',
     schema: {
       example: {
         status: 401,
@@ -127,8 +111,8 @@ export class UserController {
     schema: {
       example: {
         id: 1,
-        email: 'aa4518@naver.com',
-        nickname: '김만규',
+        email: 'sparta@naver.com',
+        nickname: '홍길동',
         point: 1000000,
         role: 'user',
         createdAt: '2024-06-28T08:53:44.857Z',

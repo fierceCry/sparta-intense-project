@@ -21,22 +21,21 @@ export class PerformanceController {
   @ApiCreatedResponse({
     schema: {
       example: {
-        userId: 2,
-        performanceName: '싸이 공연',
+        userId: 1,
+        performanceName: '워터밤 서울 2024 - 서울',
         performanceDescription:
-          '이 공연을 정말 재미있고 틀네으미으마ㅣ으미ㅏㅡㅇ미ㅡ',
-        categoryId: 23,
-        performanceVenue: '경기도 안산시 중앙동',
-        performancePrice: 16000,
+          '워터밤은 여름 축제의 대명사가 될 정도로 대한민국 여름 대표 페스티벌로 자리 잡았다. 각종 콘텐츠에서 워터밤 출연을 희망하는 연예인들이 역으로 섭외 언급을 할 정도다. 출연진을 살펴보자면 탑티어 K-POP 아티스트부터 힙합, EDM까지 같이 뛰어놀 수 있는 다양한 음악의 아티스트들로 이루어져 있다. 낮시간부터 늦은 밤까지 비는 시간 없이 공연이 진행되며 아티스트의 라이브 공연과 유명 디제이가 번갈아 공연한다. 요일별로 박재범, 현아, 지코, 제시, 선미, aespa, 청하 등의 유명 케이팝 아티스트들 또한 이름을 올리기도 한다. 긍정적인 부분은 국내 EDM 프로듀서와 DJ들이 앞타임이 아닌 K-POP 아티스트와 라인업 타임 비중을 같이 두어, 피크타임에도 공연을 하기 때문에 다른 EDM 페스티벌과는 다르게 대우를 받는 편이다.',
+        categoryId: 1,
+        performanceVenue: '서울특별시 강남구 영동대로 513',
         performanceImage: 'https://example.com/images/concert.jpg',
-        id: 15,
-        createdAt: '2024-07-02T02:11:44.416Z',
-        updatedAt: '2024-07-02T02:11:44.416Z',
+        id: 5,
+        createdAt: '2024-07-05T10:51:39.101Z',
+        updatedAt: '2024-07-05T10:51:39.101Z',
       },
     },
   })
   @UseGuards(AuthGuard('jwt'))
-  @Post('post')
+  @Post('')
   createPerformance(
     @Body() performance: CreatePerformanceDto,
     @UserInfo() user: User,
@@ -67,22 +66,22 @@ export class PerformanceController {
   @ApiOkResponse({
     schema: {
       example: {
-        id: 1,
-        userId: 2,
-        categoryId: 19,
-        performanceName: '행복한 공연',
-        performanceDescription: '이 공연을 정말 재미있고',
-        performanceVenue: '경기도 안산시 중앙동',
-        performancePrice: 16000,
-        performanceImage: 'htpps/ada/sda.',
-        createdAt: '2024-07-01T11:08:08.796Z',
-        updatedAt: '2024-07-01T11:08:08.796Z',
+        id: 5,
+        userId: 1,
+        categoryId: 1,
+        performanceName: '워터밤 서울 2024 - 서울',
+        performanceDescription:
+          '워터밤은 여름 축제의 대명사가 될 정도로 대한민국 여름 대표 페스티벌로 자리 잡았다. 각종 콘텐츠에서 워터밤 출연을 희망하는 연예인들이 역으로 섭외 언급을 할 정도다. 출연진을 살펴보자면 탑티어 K-POP 아티스트부터 힙합, EDM까지 같이 뛰어놀 수 있는 다양한 음악의 아티스트들로 이루어져 있다. 낮시간부터 늦은 밤까지 비는 시간 없이 공연이 진행되며 아티스트의 라이브 공연과 유명 디제이가 번갈아 공연한다. 요일별로 박재범, 현아, 지코, 제시, 선미, aespa, 청하 등의 유명 케이팝 아티스트들 또한 이름을 올리기도 한다. 긍정적인 부분은 국내 EDM 프로듀서와 DJ들이 앞타임이 아닌 K-POP 아티스트와 라인업 타임 비중을 같이 두어, 피크타임에도 공연을 하기 때문에 다른 EDM 페스티벌과는 다르게 대우를 받는 편이다.',
+        performanceVenue: '서울특별시 강남구 영동대로 513',
+        performanceImage: 'https://example.com/images/concert.jpg',
+        createdAt: '2024-07-05T10:51:39.101Z',
+        updatedAt: '2024-07-05T10:51:39.101Z',
       },
     },
   })
-  @Get(':category')
-  getAllPerformances(@Param('category') category: number) {
-    return this.performanceService.getAllPerformances(category);
+  @Get(':categoryId')
+  getAllPerformances(@Param('categoryId') categoryId: number) {
+    return this.performanceService.getAllPerformances(categoryId);
   }
 
   @ApiOperation({ summary: '공연 검색' })
@@ -90,28 +89,16 @@ export class PerformanceController {
     schema: {
       example: [
         {
-          id: 1,
-          userId: 2,
-          categoryId: 19,
-          performanceName: '행복한 공연',
+          id: 5,
+          userId: 1,
+          categoryId: 1,
+          performanceName: '워터밤 서울 2024 - 서울',
           performanceDescription:
-            '이 공연을 정말 재미있고 틀네으미으마ㅣ으미ㅏㅡㅇ미ㅡ',
-          performanceVenue: '경기도 안산시 중앙동',
-          performanceImage: 'htpps/ada/sda.',
-          createdAt: '2024-07-01T11:08:08.796Z',
-          updatedAt: '2024-07-01T11:08:08.796Z',
-        },
-        {
-          id: 2,
-          userId: 2,
-          categoryId: 19,
-          performanceName: '행복한 공연',
-          performanceDescription:
-            '이 공연을 정말 재미있고 틀네으미으마ㅣ으미ㅏㅡㅇ미ㅡ',
-          performanceVenue: '경기도 안산시 중앙동',
-          performanceImage: 'htpps/ada/sda.',
-          createdAt: '2024-07-01T11:12:20.575Z',
-          updatedAt: '2024-07-01T11:12:20.575Z',
+            '워터밤은 여름 축제의 대명사가 될 정도로 대한민국 여름 대표 페스티벌로 자리 잡았다. 각종 콘텐츠에서 워터밤 출연을 희망하는 연예인들이 역으로 섭외 언급을 할 정도다. 출연진을 살펴보자면 탑티어 K-POP 아티스트부터 힙합, EDM까지 같이 뛰어놀 수 있는 다양한 음악의 아티스트들로 이루어져 있다. 낮시간부터 늦은 밤까지 비는 시간 없이 공연이 진행되며 아티스트의 라이브 공연과 유명 디제이가 번갈아 공연한다. 요일별로 박재범, 현아, 지코, 제시, 선미, aespa, 청하 등의 유명 케이팝 아티스트들 또한 이름을 올리기도 한다. 긍정적인 부분은 국내 EDM 프로듀서와 DJ들이 앞타임이 아닌 K-POP 아티스트와 라인업 타임 비중을 같이 두어, 피크타임에도 공연을 하기 때문에 다른 EDM 페스티벌과는 다르게 대우를 받는 편이다.',
+          performanceVenue: '서울특별시 강남구 영동대로 513',
+          performanceImage: 'https://example.com/images/concert.jpg',
+          createdAt: '2024-07-05T10:51:39.101Z',
+          updatedAt: '2024-07-05T10:51:39.101Z',
         },
       ],
     },
@@ -124,7 +111,7 @@ export class PerformanceController {
       },
     },
   })
-  @Get(':performanceName/Search')
+  @Get('search/:performanceName')
   getPerformance(@Param('performanceName') performanceName: string) {
     return this.performanceService.getPerformance(performanceName);
   }
@@ -133,62 +120,47 @@ export class PerformanceController {
   @ApiOkResponse({
     schema: {
       example: {
-        id: 2,
-        userId: 2,
-        categoryId: 19,
-        performanceName: '행복한 공연',
+        id: 5,
+        userId: 1,
+        categoryId: 1,
+        performanceName: '워터밤 서울 2024 - 서울',
         performanceDescription:
-          '이 공연을 정말 재미있고 틀네으미으마ㅣ으미ㅏㅡㅇ미ㅡ',
-        performanceVenue: '경기도 안산시 중앙동',
-        performanceImage: 'htpps/ada/sda.',
-        createdAt: '2024-07-01T11:12:20.575Z',
-        updatedAt: '2024-07-01T11:12:20.575Z',
+          '워터밤은 여름 축제의 대명사가 될 정도로 대한민국 여름 대표 페스티벌로 자리 잡았다. 각종 콘텐츠에서 워터밤 출연을 희망하는 연예인들이 역으로 섭외 언급을 할 정도다. 출연진을 살펴보자면 탑티어 K-POP 아티스트부터 힙합, EDM까지 같이 뛰어놀 수 있는 다양한 음악의 아티스트들로 이루어져 있다. 낮시간부터 늦은 밤까지 비는 시간 없이 공연이 진행되며 아티스트의 라이브 공연과 유명 디제이가 번갈아 공연한다. 요일별로 박재범, 현아, 지코, 제시, 선미, aespa, 청하 등의 유명 케이팝 아티스트들 또한 이름을 올리기도 한다. 긍정적인 부분은 국내 EDM 프로듀서와 DJ들이 앞타임이 아닌 K-POP 아티스트와 라인업 타임 비중을 같이 두어, 피크타임에도 공연을 하기 때문에 다른 EDM 페스티벌과는 다르게 대우를 받는 편이다.',
+        performanceVenue: '서울특별시 강남구 영동대로 513',
+        performanceImage: 'https://example.com/images/concert.jpg',
+        createdAt: '2024-07-05T10:51:39.101Z',
+        updatedAt: '2024-07-05T10:51:39.101Z',
         performanceTimes: [
           {
-            id: 1,
-            performanceDateTime: '2024-07-25T00:00:00.000Z',
-            seatsRemaining: 100,
-            createdAt: '2024-07-01T11:12:20.614Z',
-            updatedAt: '2024-07-01T11:12:20.614Z',
+            id: 10,
+            performanceId: 5,
+            performanceDateTimes: '2024-07-26 20:00',
+            seatsRemaining: 300,
+            createdAt: '2024-07-05T10:51:39.128Z',
+            updatedAt: '2024-07-05T10:51:39.128Z',
           },
           {
-            id: 2,
-            performanceDateTime: '2024-07-26T00:00:00.000Z',
-            seatsRemaining: 100,
-            createdAt: '2024-07-01T11:12:20.629Z',
-            updatedAt: '2024-07-01T11:12:20.629Z',
+            id: 11,
+            performanceId: 5,
+            performanceDateTimes: '2024-07-25 19:00',
+            seatsRemaining: 300,
+            createdAt: '2024-07-05T10:51:39.127Z',
+            updatedAt: '2024-07-05T10:51:39.127Z',
           },
           {
-            id: 3,
-            performanceDateTime: '2024-07-27T00:00:00.000Z',
-            seatsRemaining: 100,
-            createdAt: '2024-07-01T11:12:20.631Z',
-            updatedAt: '2024-07-01T11:12:20.631Z',
+            id: 12,
+            performanceId: 5,
+            performanceDateTimes: '2024-07-27 21:00',
+            seatsRemaining: 300,
+            createdAt: '2024-07-05T10:51:39.130Z',
+            updatedAt: '2024-07-05T10:51:39.130Z',
           },
         ],
-        isBookable: true,
       },
     },
   })
   @Get('detail/:performanceId')
   getPerformanceId(@Param('performanceId') performanceId: number) {
     return this.performanceService.getPerformanceById(performanceId);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post('reserve')
-  async reserveSeat(@Body() reserveSeatDto: {
-    performanceId: number;
-    grade: string;
-    seatCount: number;
-    performanceTime: string;
-  }, @UserInfo() user: User) {
-    return await this.performanceService.reserveSeat(
-      user.id,
-      reserveSeatDto.performanceId,
-      reserveSeatDto.grade,
-      reserveSeatDto.seatCount,
-      reserveSeatDto.performanceTime,
-    );
   }
 }

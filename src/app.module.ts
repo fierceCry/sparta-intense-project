@@ -1,4 +1,3 @@
-import Joi from 'joi';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -14,6 +13,7 @@ import { Category } from './entities/Category';
 import { Performance } from './entities/Performance';
 import { AuthModule } from './auth/auth.module';
 import { PerformanceModule } from './performance/performance.module';
+import { OrderModule } from './order/order.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -37,21 +37,13 @@ const typeOrmModuleOptions = {
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        JWT_SECRET_KEY: Joi.string().required(),
-        DB_USERNAME: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
-        DB_NAME: Joi.string().required(),
-        DB_SYNC: Joi.boolean().required(),
-        PORT: Joi.number().required(),
-      }),
+      
     }),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
     UserModule,
     AuthModule,
     PerformanceModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
