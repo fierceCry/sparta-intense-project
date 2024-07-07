@@ -37,8 +37,40 @@ export class PerformanceService {
     if (userRole !== 'admin') {
       throw new ForbiddenException('관리자만 공연을 등록할 수 있습니다.');
     }
-  
-    const newPerformance = await this.performanceRepository.save({
+
+    const newPerformance = await this.createPerformanceEntity(
+      userId,
+      performanceName,
+      performanceDescription,
+      performanceCategory,
+      performanceVenue,
+      performanceImage,
+    );
+
+    const savedPerformanceTimes = await this.createPerformanceTimes(
+      newPerformance,
+      performanceTimes,
+      performanceSeats,
+    );
+
+    await this.createSeatsForPerformanceTimes(
+      newPerformance,
+      savedPerformanceTimes,
+      performanceSeats,
+    );
+
+    return newPerformance;
+  }
+
+  async createPerformanceEntity(
+    userId: number,
+    performanceName: string,
+    performanceDescription: string,
+    performanceCategory: number,
+    performanceVenue: string,
+    performanceImage: string,
+  ) {
+    return await this.performanceRepository.save({
       userId,
       performanceName,
       performanceDescription,
@@ -46,11 +78,17 @@ export class PerformanceService {
       performanceVenue,
       performanceImage,
     });
-  
-    const savedPerformanceTimes = await Promise.all(
+  }
+
+  async createPerformanceTimes(
+    performance: Performance,
+    performanceTimes: string[],
+    performanceSeats: PerformanceSeatDto[],
+  ) {
+    return await Promise.all(
       performanceTimes.map(async (time) => {
         const newPerformanceTime = this.performanceTimeRepository.create({
-          performance: newPerformance,
+          performance: performance,
           performanceDateTimes: [time],
           seatsRemaining: performanceSeats.reduce(
             (acc, seat) => acc + seat.seat_count,
@@ -60,40 +98,39 @@ export class PerformanceService {
         return await this.performanceTimeRepository.save(newPerformanceTime);
       }),
     );
-  
-    for (const time of savedPerformanceTimes) {
+  }
+
+  async createSeatsForPerformanceTimes(
+    performance: Performance,
+    performanceTimes: PerformanceTime[],
+    performanceSeats: PerformanceSeatDto[],
+  ) {
+    for (const time of performanceTimes) {
       for (const seat of performanceSeats) {
-        if (seat.grade.toLowerCase() === 'standing') {
-          const newSeat = this.seatsRepository.create({
-            performance: newPerformance,
-            performanceTime: time,
-            performanceTimeId: time.id,
-            seatNumber: Array.from({ length: seat.seat_count }, (_, i) => i + 1),
-            isAvailable: true,
-            grade: seat.grade,
-            price: seat.price,
-          });
-          await this.seatsRepository.save(newSeat);
-        } else {
-          const seatNumbers = Array.from(
-            { length: seat.seat_count },
-            (_, i) => i + 1,
-          );
-          const newSeat = this.seatsRepository.create({
-            performance: newPerformance,
-            performanceTime: time,
-            performanceTimeId: time.id,
-            seatNumber: seatNumbers,
-            isAvailable: true,
-            grade: seat.grade,
-            price: seat.price,
-          });
-          await this.seatsRepository.save(newSeat);
-        }
+        await this.createSeats(performance, time, seat);
       }
     }
-  
-    return newPerformance;
+  }
+
+  async createSeats(
+    performance: Performance,
+    performanceTime: PerformanceTime,
+    seat: PerformanceSeatDto,
+  ) {
+    const seatNumbers = Array.from(
+      { length: seat.seat_count },
+      (_, i) => i + 1,
+    );
+    const newSeat = this.seatsRepository.create({
+      performance: performance,
+      performanceTime: performanceTime,
+      performanceTimeId: performanceTime.id,
+      seatNumber: seatNumbers,
+      isAvailable: true,
+      grade: seat.grade,
+      price: seat.price,
+    });
+    await this.seatsRepository.save(newSeat);
   }
 
   async getAllPerformances(categoryId: number) {

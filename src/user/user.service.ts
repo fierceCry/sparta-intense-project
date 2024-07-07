@@ -44,8 +44,9 @@ export class UserService {
     return this.userRepository.findOne({ where: { email } });
   }
 
-  async login(email:string, userId:number) {
-    const payload = { email: email, id: userId };
+  async login(email:string) {
+    const { id } = await this.findByEmail(email)
+    const payload = { email: email, id: id };
     return {
       access_token: this.jwtService.sign(payload),
     };

@@ -1,12 +1,13 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { UserInfo } from 'src/common/decorators/user.decorators';
 import { User } from 'src/entities/User';
 import { ReservationDto } from './dto/create.reservation.dto';
 
 @ApiTags('ORDER')
+@ApiBearerAuth()
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
@@ -27,6 +28,7 @@ export class OrderController {
       },
     },
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Post('reserve')
   async reserveSeat(
@@ -59,6 +61,7 @@ export class OrderController {
       },
     },
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @Get('reserve')
   performanceReserve(@UserInfo() user: User) {

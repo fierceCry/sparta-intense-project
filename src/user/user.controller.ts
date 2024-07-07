@@ -1,3 +1,4 @@
+import { SignInDto } from './dto/sign-in.dto';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -88,11 +89,10 @@ export class UserController {
       ],
     },
   })
-  
   @UseGuards(AuthGuard('local'))
   @Post('sign-in')
-  signIn(@UserInfo() user: User) {
-    return this.userService.login(user.email, user.id);
+  signIn(@Body() signInDto :SignInDto) {
+    return this.userService.login(signInDto.email);
   }
 
   @ApiOperation({ summary: '프로필 조회' })

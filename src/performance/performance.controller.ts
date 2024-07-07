@@ -5,6 +5,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserInfo } from 'src/common/decorators/user.decorators';
 import { User } from 'src/entities/User';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -35,6 +36,7 @@ export class PerformanceController {
     },
   })
   @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Post('')
   createPerformance(
     @Body() performance: CreatePerformanceDto,

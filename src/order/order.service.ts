@@ -47,33 +47,38 @@ export class OrderService {
     const totalPrice = this.calculateTotalPrice(seats[0].price, seatCount);
     this.validateUserPoints(user, totalPrice);
 
-    return await this.seatsRepository.manager.transaction(
-      async (transactionalEntityManager) => {
-        await this.deductUserPoints(
-          transactionalEntityManager,
-          user,
-          totalPrice,
-        );
-        const reservedSeatNumbers = seats[0].seatNumber.slice(0, seatCount);
-        const reservedSeatNumbersString = reservedSeatNumbers.map(String); // 변환 추가
-        const order = await this.createOrder(
-          transactionalEntityManager,
-          userId,
-          performanceId,
-          reservedSeatNumbersString, // 문자열 배열로 전달
-          totalPrice,
-          seatCount,
-        );
-        await this.updateSeats(transactionalEntityManager, seats[0], seatCount);
-        await this.updatePerformanceTimeSeats(
-          transactionalEntityManager,
-          performanceTimeEntity,
-          seatCount,
-        );
+    const queryRunner = this.seatsRepository.manager.connection.createQueryRunner();
 
-        return order;
-      },
-    );
+    await queryRunner.connect();
+    await queryRunner.startTransaction('READ COMMITTED');
+
+    try {
+      await this.deductUserPoints(queryRunner, user, totalPrice);
+      const reservedSeatNumbers = seats[0].seatNumber.slice(0, seatCount);
+      const reservedSeatNumbersString = reservedSeatNumbers.map(String);
+      const order = await this.createOrder(
+        queryRunner,
+        userId,
+        performanceId,
+        reservedSeatNumbersString,
+        totalPrice,
+        seatCount,
+      );
+      await this.updateSeats(queryRunner, seats[0], seatCount);
+      await this.updatePerformanceTimeSeats(
+        queryRunner,
+        performanceTimeEntity,
+        seatCount,
+      );
+
+      await queryRunner.commitTransaction();
+      return order;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async validateUser(userId: number) {
@@ -129,7 +134,7 @@ export class OrderService {
     return seats;
   }
 
-  calculateTotalPrice(price: number, seatCount: number){
+  calculateTotalPrice(price: number, seatCount: number) {
     return price * seatCount;
   }
 
@@ -139,17 +144,13 @@ export class OrderService {
     }
   }
 
-  async deductUserPoints(
-    transactionalEntityManager: any,
-    user: any,
-    totalPrice: number,
-  ) {
+  async deductUserPoints(queryRunner: any, user: any, totalPrice: number) {
     user.point -= totalPrice;
-    await transactionalEntityManager.save(user);
+    await queryRunner.manager.save(user);
   }
 
   async createOrder(
-    transactionalEntityManager: any,
+    queryRunner: any,
     userId: number,
     performanceId: number,
     reservedSeatNumbers: string[],
@@ -164,29 +165,25 @@ export class OrderService {
       paymentStatus: 'paid',
       quantity: seatCount,
     });
-    await transactionalEntityManager.save(order);
+    await queryRunner.manager.save(order);
     return order;
   }
 
-  async updateSeats(
-    transactionalEntityManager: any,
-    seats: Seats,
-    seatCount: number,
-  ) {
+  async updateSeats(queryRunner: any, seats: Seats, seatCount: number) {
     seats.seatNumber = seats.seatNumber.slice(seatCount);
     if (seats.seatNumber.length === 0) {
       seats.isAvailable = false;
     }
-    await transactionalEntityManager.save(seats);
+    await queryRunner.manager.save(seats);
   }
 
   async updatePerformanceTimeSeats(
-    transactionalEntityManager: any,
+    queryRunner: any,
     performanceTimeEntity: PerformanceTime,
     seatCount: number,
   ) {
     performanceTimeEntity.seatsRemaining -= seatCount;
-    await transactionalEntityManager.save(performanceTimeEntity);
+    await queryRunner.manager.save(performanceTimeEntity);
   }
 
   async getPerformanceReserve(userId: number) {
