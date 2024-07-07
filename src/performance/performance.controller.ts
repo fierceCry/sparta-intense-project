@@ -37,7 +37,7 @@ export class PerformanceController {
   })
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @Post('')
+  @Post()
   createPerformance(
     @Body() performance: CreatePerformanceDto,
     @UserInfo() user: User,
