@@ -29,7 +29,7 @@
 
 # 기술스택
 
-- 백엔드 프레임워크: NestJS, typeORM
+- 백엔드 프레임워크: NestJS, typeORM, Swagger
 - 데이터베이스 : MySQL
 - 인증 및 보안: JSON Web Token (JWT), bcrypt, Joi
 
@@ -72,6 +72,10 @@
     JWT_SECRET_KEY=
     JWT_EXPIRE=
     ```
+
+### Swagger 주소
+API 문서를 확인하려면 다음 주소로 이동하세요:
+- **URL**: `http://43.203.96.176:3095/sparta`
 
 1. 애플리케이션을 실행합니다:
     ```bash
