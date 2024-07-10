@@ -14,7 +14,7 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserInfo } from 'src/common/decorators/user.decorators';
-import { User } from 'src/entities/User';
+import { User } from 'src/entities/User.entity';
 
 @ApiTags('USERS')
 @Controller('user')
@@ -65,30 +65,11 @@ export class UserController {
     return this.userService.signUp(email, nickname, password);
   }
 
-  @ApiOperation({ summary: '로그인' })
-  @ApiOkResponse({
-    schema: {
-      example: {
-        accessToken:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXV9.eyJpZCI6NiwiaWF0IjoxNzE5NTkxMzU5fQ.8eXmMa8s5BrD0TSbCdZJETGKHsakpQ8AArIoeR9q3R8',
-      },
-    },
-  })
-  @ApiUnauthorizedResponse({
-    description: '인증되지 않은 접근',
-    schema: {
-      example: [
-        {
-          status: 401,
-          message: '가입되지 않은 이메일 입니다.',
-        },
-        {
-          status: 401,
-          message: '비밀번호가 일치하지 않습니다.',
-        },
-      ],
-    },
-  })
+  /**
+   * 로그인
+   * @param signInDto 
+   * @returns 
+   */
   @UseGuards(AuthGuard('local'))
   @Post('sign-in')
   signIn(@Body() signInDto :SignInDto) {

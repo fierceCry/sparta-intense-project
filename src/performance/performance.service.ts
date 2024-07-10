@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { Performance } from 'src/entities/Performance';
-import { PerformanceTime } from 'src/entities/PerformanceTime';
-import { Seats } from 'src/entities/Seats';
+import { Performance } from 'src/entities/Performance.entity';
+import { PerformanceTime } from 'src/entities/PerformanceTime.entity';
+import { Seats } from 'src/entities/Seats.entity';
 import _ from 'lodash';
 import { PerformanceSeatDto } from '../performance/dto/performance.create.dto';
 

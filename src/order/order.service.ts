@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Order } from 'src/entities/Order';
-import { PerformanceTime } from 'src/entities/PerformanceTime';
-import { Seats } from 'src/entities/Seats';
+import { Order } from 'src/entities/Order.entity';
+import { PerformanceTime } from 'src/entities/PerformanceTime.entity';
+import { Seats } from 'src/entities/Seats.entity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { Performance } from 'src/entities/Performance';
+import { Performance } from 'src/entities/Performance.entity';
 
 @Injectable()
 export class OrderService {

@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Performance } from './Performance';
+import { Performance } from './Performance.entity';
 
 @Entity('categories')
 export class Category {

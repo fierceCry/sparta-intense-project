@@ -13,17 +13,25 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
     }),
   );
   const config = new DocumentBuilder()
     .setTitle('내일배움캠프 심화 개인과제')
     .setDescription('내일배움캠프 심화 개인과제 API 명세서')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }) // JWT 사용을 위한 설정
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/sparta', app, document);
+  SwaggerModule.setup('/sparta', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true, // 새로고침 시에도 JWT 유지하기
+      tagsSorter: 'alpha', // API 그룹 정렬을 알파벳 순으로
+      operationsSorter: 'alpha', // API 그룹 내 정렬을 알파벳 순으로
+    },
+  });
 
   if (module.hot) {
     module.hot.accept();

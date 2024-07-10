@@ -8,11 +8,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from './User';
-import { Category } from './Category';
-import { PerformanceTime } from './PerformanceTime';
-import { Seats } from './Seats';
-import { Order } from './Order';
+import { User } from './User.entity';
+import { Category } from './Category.entity';
+import { PerformanceTime } from './PerformanceTime.entity';
+import { Seats } from './Seats.entity';
+import { Order } from './Order.entity';
 
 @Entity({ name: 'performance' })
 export class Performance {

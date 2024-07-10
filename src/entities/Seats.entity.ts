@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Performance } from './Performance';
-import { Order } from './Order';
-import { PerformanceTime } from './PerformanceTime';
+import { Performance } from './Performance.entity';
+import { Order } from './Order.entity';
+import { PerformanceTime } from './PerformanceTime.entity';
 
 @Entity('seats')
 export class Seats {
